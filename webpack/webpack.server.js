@@ -30,7 +30,7 @@ const app = new WebpackDevServer(appCompiler, {
 // Serve static resources
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use('/', ROOT);
-app.use('/data/topics.json', DATA_ROOT);
+app.use('/api/topics.json', DATA_ROOT);
 app.use('/css/bootstrap.css', BS_STYLE_ROOT);
 app.use('/scripts/bootstrap.js', BS_JS_ROOT);
 app.use('/scripts/jquery.js', JQ_JS_ROOT);

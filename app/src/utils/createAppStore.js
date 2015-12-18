@@ -1,11 +1,13 @@
-import {createHistory} from 'history';
-import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import {
+  applyMiddleware,
+  compose,
+  createStore,
+  combineReducers,
+} from 'redux';
 
 import thunkMiddleware from 'redux-thunk';
-// import {batchedUpdatesMiddleware} from 'redux-batched-updates';
-import {reduxReactRouter} from 'redux-router';
+import promiseMiddleware from 'redux-promise';
 
-import appRoutes from 'routes/AppRoutes';
 import appReducers from 'reducers/AppReducers';
 
 export default function createAppStore(initialState) {
@@ -13,7 +15,7 @@ export default function createAppStore(initialState) {
 
   finalCreateStore = compose(
     applyMiddleware(thunkMiddleware),
-    reduxReactRouter({ routes: appRoutes, createHistory })
+    applyMiddleware(promiseMiddleware)
   )(finalCreateStore);
 
   return finalCreateStore(combineReducers(appReducers), initialState);

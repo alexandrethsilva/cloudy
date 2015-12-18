@@ -1,14 +1,13 @@
-import 'babel/polyfill';
+import 'babel-polyfill';
 
 import React from 'react';
 import DOM from 'react-dom';
-
 import {Provider} from 'react-redux';
-import {ReduxRouter} from 'redux-router';
-import {RelayRoutingContext} from 'react-router-relay';
 
 import init from './init';
 import createAppStore from 'utils/createAppStore';
+
+import App from 'components/App';
 
 import Logger from 'utils/logger';
 
@@ -20,9 +19,7 @@ async function initApp() {
     await store.dispatch(init());
 
     const component = (
-      <Provider store={store}>
-        <ReduxRouter RoutingContext={RelayRoutingContext} />
-      </Provider>
+      <Provider store={store}><App /></Provider>
     );
 
     const container = document.getElementById('root');

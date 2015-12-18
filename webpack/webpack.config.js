@@ -6,7 +6,7 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://0.0.0.0:3000',
     'webpack/hot/only-dev-server',
-    './app/scripts/index',
+    './app/src/main',
   ],
   plugins: [
     new HotModuleReplacementPlugin(),
@@ -18,10 +18,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        loaders: [
-          'react-hot',
-          'babel?cacheDirectory&optional[]=runtime&stage=0&plugins=./build/babelRelayPlugin',
-        ],
+        loader: 'babel',
       },
     ],
   },
@@ -33,10 +30,11 @@ module.exports = {
   },
   resolve: {
     alias: {
-      data: path.join(__dirname, '/app/data'),
-      reducers: path.join(__dirname, '/app/reducers'),
-      routes: path.join(__dirname, '/app/routes'),
-      utils: path.join(__dirname, '/app/scripts/utils'),
+      actions: path.join(__dirname, '..', '/app/src/actions'),
+      data: path.join(__dirname, '..', '/app/data'),
+      reducers: path.join(__dirname, '..', '/app/src/reducers'),
+      components: path.join(__dirname, '..', '/app/src/components'),
+      utils: path.join(__dirname, '..', '/app/src/utils'),
     },
   },
 };
