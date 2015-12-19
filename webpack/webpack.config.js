@@ -31,9 +31,10 @@ module.exports = {
   resolve: {
     alias: {
       actions: path.join(__dirname, '..', '/app/src/actions'),
-      data: path.join(__dirname, '..', '/app/data'),
-      reducers: path.join(__dirname, '..', '/app/src/reducers'),
       components: path.join(__dirname, '..', '/app/src/components'),
+      data: path.join(__dirname, '..', '/app/data'),
+      models: path.join(__dirname, '..', '/app/src/models'),
+      reducers: path.join(__dirname, '..', '/app/src/reducers'),
       utils: path.join(__dirname, '..', '/app/src/utils'),
     },
   },

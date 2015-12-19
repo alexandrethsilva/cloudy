@@ -1,6 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import {createAction} from 'redux-act';
 
+import Topic from 'models/Topic';
+
 export const viewTopics = createAction('viewTopics');
 
 export const fetchTopics = async () => {
@@ -12,13 +14,12 @@ export const fetchTopics = async () => {
       return response.json();
     })
     .then((results) => {
-      return results;
+      return results.topics.map((data) => Topic(data)); // eslint-disable-line new-cap
     });
 };
 
 export function init() {
   return async (dispatch) => {
-    const topics = await fetchTopics();
-    dispatch(viewTopics(topics));
+    dispatch(viewTopics(await fetchTopics()));
   };
 }
