@@ -74,7 +74,7 @@ class TopicsCloud extends Component {
     const fontSizeDistributionList = List([10, 12, 14, 16, 18, 20]);
     const fontSizeRange = (
       topics.first().topicVolume() - topics.last().topicVolume()
-    ) / fontSizeDistributionList.size;
+    ) / (fontSizeDistributionList.size - 1);
 
     const topicList = topics.toArray().map((topic) => {
       /**
@@ -86,7 +86,7 @@ class TopicsCloud extends Component {
         topicLabel: topic.topicLabel(),
         topicScore: topic.topicSentimentScore(),
         topicSize: fontSizeDistributionList
-          .get(Math.floor(topic.topicVolume() / fontSizeRange) - 1),
+          .get(Math.floor(topic.topicVolume() / fontSizeRange)),
       };
     });
 
@@ -94,7 +94,7 @@ class TopicsCloud extends Component {
       .font('sans-serif')
       .padding(15)
       .rotate(() => 0)
-      .size([700, 400])
+      .size([800, 500])
       .words(topicList)
       .text((topic) => topic.topicLabel)
       .random(() => 0.5)
@@ -114,8 +114,8 @@ class TopicsCloud extends Component {
   }
 
   renderTopicsCloudGivenCalculations(calculatedTopics) {
-    const width = 700;
-    const height = 400;
+    const width = 800;
+    const height = 500;
 
     const topicsListOutput = calculatedTopics.map((cloudTopic) => {
       const {
