@@ -18,22 +18,22 @@ export default class TopicDetails extends Component {
     return topic ? (
       <div className="topic__details">
         <div className="topic__details__info">
-          <h3>Information on {topicLabel}</h3>
+          <h3>{`Information on ${topicLabel}`}</h3>
           <p>
-            Total mentions: <strong>{topicVolume}</strong>
+            {'Total mentions:'} <strong>{topicVolume}</strong>
           </p>
           <p>
-            Positive mentions: <strong className="topic__item__label--positive">
+            {'Positive mentions:'} <strong className="topic__item__label--positive">
               {positiveMentions ? positiveMentions : 'N/A'}
             </strong>
           </p>
           <p>
-            Neutral mentions: <strong className="topic__item__label--neutral">
+            {'Neutral mentions:'} <strong className="topic__item__label--neutral">
               {neutralMentions ? neutralMentions : 'N/A'}
             </strong>
           </p>
           <p>
-            Negative mentions: <strong className="topic__item__label--negative">
+            {'Negative mentions:'} <strong className="topic__item__label--negative">
               {negativeMentions ? negativeMentions : 'N/A'}
             </strong>
           </p>
