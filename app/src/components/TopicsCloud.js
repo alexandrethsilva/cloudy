@@ -103,7 +103,7 @@ class TopicsCloud extends Component {
       })
       /**
        * Here is the catch. After all is done, we just retrieve the
-       * information in a consumable was and dispatch it to our store.
+       * information in a consumable way and dispatch it to our store.
        */
       .on('end', (calculatedTopics) => dispatch(displayTopicsCloud(calculatedTopics)));
 
