@@ -1,6 +1,7 @@
 @import 'variables';
 
 body {
+  color: $gray-lighter;
   font-family: $default-font-copy;
   font-weight: 300;
 }
@@ -12,4 +13,5 @@ h4,
 h5,
 h6 {
   font-family: $default-font-display;
+  font-weight: normal;
 }

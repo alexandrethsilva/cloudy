@@ -11,19 +11,14 @@ $gray:                   lighten($gray-base, 33.5%) !default;
 $gray-light:             lighten($gray-base, 56.7%) !default;
 $gray-lighter:           lighten($gray-base, 91.5%) !default;
 
-$brand-primary:         rgba(20, 36, 249, 1) !default;
-$brand-primary-light:         rgba(219, 228, 239, 1) !default;
+$brand-primary:         #fff !default;
 $brand-success:         rgba(88, 185, 87, 1) !default;
 $brand-warning:         rgba(242, 174, 67, 1) !default;
 $brand-danger:          rgba(219, 82, 75, 1) !default;
 
-$brand-dark: rgba(48, 34, 93, 1);
-
-$default-border-radius: .2em;
-
-$default-shadow-color: fade-out($brand-dark, .8);
+$default-shadow-color: fade-out($gray-base, .8);
 $default-box-shadow: 0 0 6em 2em $default-shadow-color;
 $default-box-shadow--wide: 0 0 4em .5em $default-shadow-color;
 
 $default-font-display: 'Montserrat', sans-serif;
-$default-font-copy: 'Lato', sans-serif;
+$default-font-copy: 'HelveticaNeue', sans-serif;
