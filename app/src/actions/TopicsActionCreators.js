@@ -5,8 +5,18 @@ import {createAction} from 'redux-act';
 
 import Topic from 'models/Topic';
 
+/**
+ * Creates simple `ActionCreators` viewing a single topic as well
+ * as a list of topics.
+ */
+
 export const viewTopic = createAction('viewTopic');
 export const viewTopics = createAction('viewTopics');
+
+/**
+ * Creates an `ActionCreator` for fetching a list of topics from our
+ * endpoint.
+ */
 
 export const fetchTopics = async () => {
   return await fetch('/api/topics.json')

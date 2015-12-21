@@ -1,5 +1,10 @@
-//Matches any file with the name actionCreators.js
-//or any JS file inside a folder called actionCreator with the name index.js
+/**
+ * The mother of all inits. This guy takes every init the `ActionCreators`
+ * and triggers it.
+ *
+ * The regex matches any file with the name <any>ActionCreators.js
+ */
+
 const req = require.context(
   'actions', true, /^\.\/[a-z]+ActionCreators(\/index)?\.js$/i
 );

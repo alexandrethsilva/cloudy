@@ -2,6 +2,11 @@
 /*eslint-disable no-console */
 const ENV: string = process.env.NODE_ENV;
 
+/**
+ * Simple logger utility that I always use to differentiate logs
+ * within apps.
+ */
+
 const debugConfig: string = `
   color:#555;
   background:rgba(85,85,85,.15);

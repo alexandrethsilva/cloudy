@@ -1,12 +1,28 @@
 import {connect} from 'react-redux';
 import React, {Component, PropTypes} from 'react';
 
+/**
+ * This component refers to the right panel where more detailed topic metadata
+ * is displayed. It's defined and can be included or removed without any
+ * side-effect on its surroundings.
+ */
 export default class TopicDetails extends Component {
+  /**
+   * Here we define conditions for the accepted PropTypes for this component.
+   */
   static propTypes = {
     topic: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   }
 
   render() {
+    /**
+     * In general, I prefer to define any use of methods from a model at the
+     * top of a component render, so that anyone who's new to it can have an
+     * overall idea of which functionalities this component depends on.
+     * Plus, this provides the extra advantage of making a single calculation
+     * in cases where the same information is referenced in multiple parts
+     * of the rendering process.
+     */
     const {topic} = this.props;
 
     const topicLabel = topic ? topic.topicLabel() : null;
@@ -49,10 +65,20 @@ export default class TopicDetails extends Component {
   }
 }
 
+/**
+ * Here we establish the connection between this component and our
+ * central store, using the `connect` functionality from Redux.
+ * The beauty of it is that it looks at information dispatched by any
+ * component to the reducer of its interest, without depending on them
+ * and without requiring specific properties to be passed.
+ */
 function selectTopicDetails(store) {
   return {
     topic: store.topicDetails ? store.topicDetails : null,
   };
 }
 
+/**
+ * The connection is here, using the selector we defined above.
+ */
 export default connect(selectTopicDetails)(TopicDetails);

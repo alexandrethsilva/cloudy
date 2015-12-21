@@ -3,7 +3,7 @@ import path from 'path';
 
 import test from 'blue-tape';
 import Topic from '../../app/src/models/Topic';
-import {topicDisplayColorGivenSentimentScore} from '../../app/src/utils/topicUtils';
+import {topicDisplayGivenSentimentScore} from '../../app/src/utils/topicUtils';
 
 const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
 const topics =
@@ -19,21 +19,21 @@ test('Topics', (parent) => {
 
       if (score > 60) {
         t.is(
-          topicDisplayColorGivenSentimentScore(score),
-          'green',
-          'Color matches the topic score - Positive'
+          topicDisplayGivenSentimentScore(score),
+          'positive',
+          'Display output matches the topic score - Positive'
         );
       } else if (score < 40) {
         t.is(
-          topicDisplayColorGivenSentimentScore(score),
-          'red',
-          'Color matches the topic score - Negative'
+          topicDisplayGivenSentimentScore(score),
+          'negative',
+          'Display output matches the topic score - Negative'
         );
       } else {
         t.is(
-          topicDisplayColorGivenSentimentScore(score),
-          'gray',
-          'Color matches the topic score - Neutral'
+          topicDisplayGivenSentimentScore(score),
+          'neutral',
+          'Display output matches the topic score - Neutral'
         );
       }
     });

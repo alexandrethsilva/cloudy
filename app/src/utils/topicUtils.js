@@ -1,9 +1,7 @@
-export function topicDisplayColorGivenSentimentScore(score) {
-  if (score > 60) { return 'green'; }
-  if (score < 40) { return 'red'; }
-  return 'gray';
-}
 
+/**
+ * General `Topic` utilities.
+ */
 export function topicDisplayGivenSentimentScore(score) {
   if (score > 60) { return 'positive'; }
   if (score < 40) { return 'negative'; }
