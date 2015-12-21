@@ -1,8 +1,11 @@
+import {Map} from 'immutable';
+
 import fetch from 'isomorphic-fetch';
 import {createAction} from 'redux-act';
 
 import Topic from 'models/Topic';
 
+export const viewTopic = createAction('viewTopic');
 export const viewTopics = createAction('viewTopics');
 
 export const fetchTopics = async () => {
@@ -14,7 +17,12 @@ export const fetchTopics = async () => {
       return response.json();
     })
     .then((results) => {
-      return results.topics.map((data) => Topic(data)); // eslint-disable-line new-cap
+      const topics = results.topics.map((data) => Topic(data));
+
+      return topics
+        .reduce((acc, topic) => {
+          return acc.set(topic.topicId(), topic);
+        }, Map());
     });
 };
 

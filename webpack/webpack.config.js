@@ -20,6 +20,10 @@ module.exports = {
         exclude: /(node_modules)/,
         loader: 'babel',
       },
+      {
+        test: /\.scss$/,
+        loader: 'style!css!sass',
+      },
     ],
   },
   output: {
@@ -35,6 +39,7 @@ module.exports = {
       data: path.join(__dirname, '..', '/app/data'),
       models: path.join(__dirname, '..', '/app/src/models'),
       reducers: path.join(__dirname, '..', '/app/src/reducers'),
+      styles: path.join(__dirname, '..', '/app/styles'),
       utils: path.join(__dirname, '..', '/app/src/utils'),
     },
   },

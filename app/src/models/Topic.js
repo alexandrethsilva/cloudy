@@ -6,7 +6,7 @@ export default function Topic(source) {
   const topicVolume = () => source.volume;
   const topicType = () => source.type;
   const topicSentimentList = () => source.sentiment;
-  const topicSentimentGivenType = (type) => topicSentimentList[type];
+  const topicSentimentGivenType = (type) => topicSentimentList()[type];
   const topicSentimentScore = () => source.sentimentScore;
   const topicBurst = () => source.burst;
   // Let's avoid the infamous boolean trap

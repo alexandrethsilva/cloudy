@@ -1,0 +1,126 @@
+@import '~compass-mixins/lib/compass/css3/flexbox';
+@import '~compass-mixins/lib/compass/css3/transition';
+@import '~compass-mixins/lib/compass/css3/text-shadow';
+@import '~compass-mixins/lib/compass/css3/transform';
+
+@import 'typography';
+@import 'variables';
+@import 'mixins';
+
+html,
+body {
+  background-color: $gray-lighter;
+  font-weight: 300;
+  margin: 0;
+}
+
+.root {
+  @include align-items(center);
+  @include display-flex();
+  @include justify-content(center);
+
+  .root__container {
+    @include align-self(center);
+    @include display-flex();
+    @include flex(1 100%);
+    @include flex-direction(row);
+
+    border-radius: $default-border-radius;
+    box-shadow: $default-box-shadow--wide;
+    height: calc(100vh - 10em);
+    margin: 5em;
+    position: relative;
+    z-index: 1;
+
+    .root__container__title {
+      color: fade-out($gray-darker, .8);
+      font-size: 15vw;
+      margin-bottom: 0;
+      margin-top: -.75em;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      z-index: -1;
+    }
+  }
+}
+
+.topic__cloud {
+  @include align-items(center);
+  @include display-flex();
+  @include flex(3);
+  @include justify-content(center);
+
+  background-color: white;
+  overflow: scroll;
+
+  .topic__cloud__container {
+    @include align-items(center);
+    @include align-self(center);
+    @include display-flex();
+    @include justify-content(center);
+
+    fill: white;
+    font-family: $default-font-display;
+  }
+
+  .topic__cloud__area {
+    @include align-self(center);
+
+    fill: white;
+    font-family: $default-font-display;
+  }
+}
+
+.topic__details {
+  @include display-flex();
+  @include flex(1);
+  @include flex-direction(row);
+
+  background-color: white;
+  z-index: 1;
+
+  .topic__details__empty {
+    @include flex(1);
+    @include align-self(center);
+
+    color: $gray-light;
+    font-size: .8em;
+    margin: 3em;
+    text-align: center;
+  }
+
+  .topic__details__info {
+    @include flex(1);
+    @include align-self(center);
+
+    color: $gray-dark;
+    margin: 3em;
+    text-align: left;
+  }
+
+}
+
+.topic__item__label {
+  @include transition(fill .2s ease-in-out);
+  cursor: pointer;
+  padding: 3px;
+
+  &:hover {
+    @include text-shadow(.2em .2em 1em $default-shadow-color);
+    fill: $gray-darker;
+  }
+}
+
+.topic__item__label--positive {
+  color: $brand-success;
+  fill: $brand-success;
+}
+.topic__item__label--neutral {
+  color: $gray-light;
+  fill: $gray-light;
+}
+.topic__item__label--negative {
+  color: $brand-danger;
+  fill: $brand-danger;
+}
