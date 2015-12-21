@@ -82,7 +82,7 @@ body {
 
     color: $gray;
     font-size: .8em;
-    margin: 3em;
+    margin: 3em 3em 3em 0;
     text-align: center;
   }
 
@@ -91,7 +91,7 @@ body {
     @include align-self(center);
 
     font-size: .9em;
-    margin: 3em;
+    margin: 3em 3em 3em 0;
     text-align: left;
   }
 

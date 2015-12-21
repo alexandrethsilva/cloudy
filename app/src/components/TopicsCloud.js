@@ -94,7 +94,7 @@ class TopicsCloud extends Component {
       .font('sans-serif')
       .padding(15)
       .rotate(() => 0)
-      .size([800, 500])
+      .size([700, 300])
       .words(topicList)
       .text((topic) => topic.topicLabel)
       .random(() => 0.5)
@@ -114,8 +114,8 @@ class TopicsCloud extends Component {
   }
 
   renderTopicsCloudGivenCalculations(calculatedTopics) {
-    const width = 800;
-    const height = 500;
+    const width = 700;
+    const height = 300;
 
     const topicsListOutput = calculatedTopics.map((cloudTopic) => {
       const {
