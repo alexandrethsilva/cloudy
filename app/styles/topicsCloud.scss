@@ -51,7 +51,7 @@ body {
   @include justify-content(center);
 
   background-color: $gray-darker;
-  overflow: scroll;
+  overflow: hidden;
 
   .topic__cloud__container {
     @include align-items(center);

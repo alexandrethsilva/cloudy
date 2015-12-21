@@ -91,8 +91,8 @@ class TopicsCloud extends Component {
     });
 
     const layout = cloud()
-      .font('Montserrat')
-      .padding(5)
+      .font('sans-serif')
+      .padding(15)
       .rotate(() => 0)
       .size([700, 400])
       .words(topicList)
