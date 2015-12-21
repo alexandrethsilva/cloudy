@@ -1,5 +1,5 @@
 # Cloudy
-A small React/Redux app demonstratind uni-directional data-flow, its advantages, truly independent components and a bit more.
+A small React/Redux app demonstrating uni-directional data-flow, its advantages, truly independent components and a bit more.
 
 ![alt Screenshot](https://github.com/alexandrethsilva/cloudy/blob/master/readme/cloudy.png "Screenshot")
 
