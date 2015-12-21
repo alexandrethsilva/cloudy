@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint bin/* app *.js",
-    "precommit": "npm run lint && npm test",
-    "prepush": "npm run lint && npm test",
+    "precommit": "npm run lint",
+    "prepush": "npm run lint",
     "start": "babel-node webpack/webpack.server.js",
     "test": "babel-tape-runner __tests__/**/*.test.js | tap-difflet"
   },
