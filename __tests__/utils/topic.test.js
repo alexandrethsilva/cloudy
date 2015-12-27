@@ -2,52 +2,79 @@ import fs from 'fs';
 import path from 'path';
 
 import test from 'blue-tape';
+import {random} from 'lodash';
+import {List} from 'immutable';
+
 import Topic from '../../app/src/models/Topic';
 import {topicDisplayGivenSentimentScore} from '../../app/src/utils/topicUtils';
+import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/genericUtils';
 
-const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
-const topics =
-  JSON.parse(fs.readFileSync(topicsPath, 'utf8')).topics
-    .map((data) => Topic(data));
 
-test('Topics', (parent) => {
-  parent.test('Colors are provided correctly according to the topic score', (t) => {
-    t.plan(topics.length);
+const setup = () => {
+  const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
+  const topics =
+    JSON.parse(fs.readFileSync(topicsPath, 'utf8')).topics
+      .reduce((accumulator, data) => accumulator.push(Topic(data)), List());
 
-    topics.forEach((topic) => {
-      const score = topic.topicSentimentScore();
+  const fixtures = {
+    testSampleSize: random(0, topics.size),
+    topics: topics,
+  };
 
-      if (score > 60) {
-        t.is(
-          topicDisplayGivenSentimentScore(score),
-          'positive',
-          'Display output matches the topic score - Positive'
+  return fixtures;
+};
+
+test('Topic Utils', (parent) => {
+  parent.test('topicDisplayGivenSentimentScore()', (child) => {
+    child.test('topicDisplayGivenSentimentScore() output', (assert) => {
+
+      const {topics, testSampleSize} = setup();
+      const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+      sampleList.forEach((topic) => {
+        const score = topic.topicSentimentScore();
+
+        const actualOutput = topicDisplayGivenSentimentScore(score);
+        let expectedOutput;
+
+        const actualType = typeof actualOutput;
+        const expectedType = 'string';
+
+        assert.is(
+          actualType,
+          expectedType,
+          'Should return a string'
         );
-      } else if (score < 40) {
-        t.is(
-          topicDisplayGivenSentimentScore(score),
-          'negative',
-          'Display output matches the topic score - Negative'
-        );
-      } else {
-        t.is(
-          topicDisplayGivenSentimentScore(score),
-          'neutral',
-          'Display output matches the topic score - Neutral'
-        );
-      }
-    });
-  });
 
-  parent.test('Volumes provided for the challenge are consistent', (t) => {
-    t.plan(topics.length);
+        if (score > 60) {
+          expectedOutput = 'positive';
 
-    topics.forEach((topic) => {
-      t.isEqual(
-        topic.topicVolume(),
-        topic.topicCalculatedVolume(),
-        'The provided and calculated volumes match'
-      );
+          assert.is(
+            actualOutput,
+            expectedOutput,
+            `The label (${actualOutput}) should match the topic score (${score})`
+          );
+        } else if (score < 40) {
+          expectedOutput = 'negative';
+
+          assert.is(
+            actualOutput,
+            expectedOutput,
+            `The label (${actualOutput}) should match the topic score (${score})`
+          );
+        } else {
+          expectedOutput = 'neutral';
+
+          assert.is(
+            actualOutput,
+            expectedOutput,
+            `The label (${actualOutput}) should match the topic score (${score})`
+          );
+        }
+      });
+
+      assert.end();
+
     });
   });
 });
