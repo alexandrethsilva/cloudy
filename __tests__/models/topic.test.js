@@ -17,7 +17,7 @@ const setup = () => {
       .reduce((accumulator, data) => accumulator.push(Topic(data)), List());
 
   const fixtures = {
-    testSampleSize: 1, //random(0, topics.size),
+    testSampleSize: 5, //random(0, topics.size),
     topics: topics,
   };
 
@@ -32,20 +32,39 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicId = topic.topicId();
 
-      const topicId = topic.topicId();
+          const actualOut = check.string(topicId);
+          const expectedOut = true;
 
-      const actual = check.string(topicId);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicLabel = topic.topicLabel();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return a string [>> ${topicId}]`
-      );
+            assert.comment(
+              `Should return a String
+              ---
+                expected: string
+                actual:   ${topicId} [${typeof topicLabel}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return a String`);
+    }
 
     assert.end();
 
@@ -55,20 +74,39 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicLabel = topic.topicLabel();
 
-      const topicLabel = topic.topicLabel();
+          const actualOut = check.string(topicLabel);
+          const expectedOut = true;
 
-      const actual = check.string(topicLabel);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return a string [>> ${topicLabel}]`
-      );
+            assert.comment(
+              `Should return a String
+              ---
+                expected: string
+                actual:   ${topicLabel} [${typeof topicLabel}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return a String`);
+    }
 
     assert.end();
 
@@ -78,20 +116,39 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicVolume = topic.topicVolume();
 
-      const topicVolume = topic.topicVolume();
+          const actualOut = check.greaterOrEqual(topicVolume, 0);
+          const expectedOut = true;
 
-      const actual = check.greaterOrEqual(topicVolume, 0);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return a either( 0 | positive ) [>> ${topicVolume}]`
-      );
+            assert.comment(
+              `Should return an Either[0, Positive]
+              ---
+                expected: Either[0, Positive]
+                actual:   ${topicVolume} [${typeof topicVolume}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Either[0, Positive]`);
+    }
 
     assert.end();
 
@@ -101,20 +158,40 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicType = topic.topicType();
 
-      const topicType = topic.topicType();
+          const actualOut = check.string(topicType);
+          const expectedOut = true;
 
-      const actual = check.string(topicType);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return a string [>> ${topicType}]`
-      );
+            assert.comment(
+              `Should return a String
+              ---
+                expected: String
+                actual:   ${topicType} [${typeof topicType}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return a String`);
+    }
 
     assert.end();
 
@@ -124,20 +201,39 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicSentimentList = topic.topicSentimentList();
 
-      const topicSentimentList = topic.topicSentimentList();
+          const actualOut = check.object(topicSentimentList);
+          const expectedOut = true;
 
-      const actual = check.object(topicSentimentList);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return an object`
-      );
+            assert.comment(
+              `Should return an Object
+              ---
+                expected: Object
+                actual:   ${JSON.stringify(topicSentimentList)} [${typeof topicSentimentList}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Object`);
+    }
 
     assert.end();
 
@@ -147,26 +243,59 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    const possibleTypes = [
-      'positive',
-      'neutral',
-      'negative',
-    ];
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const possibleTypes = [
+            'positive',
+            'neutral',
+            'negative',
+          ];
 
-    sampleList.forEach((topic) => {
-      possibleTypes.forEach((type) => {
-        const topicSentimentGivenType = topic.topicSentimentGivenType(type);
+          const actualOut = check.all(
+            check.apply(
+              possibleTypes,
+              (type) => {
+                const topicSentimentGivenType = topic.topicSentimentGivenType(type);
 
-        const actual = check.maybe.greaterOrEqual(topicSentimentGivenType, 0);
-        const expected = true;
+                const typeActual = check.maybe.greaterOrEqual(topicSentimentGivenType, 0);
+                const typeExpected = true;
 
-        assert.equal(
-          actual,
-          expected,
-          `Should return a maybe( either( 0 | positive ) ) [>> ${topicSentimentGivenType}]`
-        );
-      });
-    });
+                if (!isEqual(typeActual, typeExpected)) {
+                  const topicId = topic.topicId();
+                  const topicLabel = topic.topicLabel();
+
+                  assert.comment(
+                    `Should return a Maybe[Either[0, Positive]]
+                    ---
+                      expected: Maybe[Either[0, Positive]]
+                      actual:   ${topicSentimentGivenType} [${typeof topicSentimentGivenType}]
+                    ...`
+                  );
+                  assert.fail(
+                    `Error found on ${topicLabel} [ID: ${topicId}]`
+                  );
+                  return false;
+                }
+                return true;
+              }
+            )
+          );
+          const expectedOut = true;
+
+          if (!isEqual(actualOut, expectedOut)) {
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
+
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return a Maybe[Either[0, Positive]]`);
+    }
 
     assert.end();
 
@@ -176,20 +305,39 @@ test('Topic Model', (parent) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-    sampleList.forEach((topic) => {
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicBurst = topic.topicBurst();
 
-      const topicBurst = topic.topicBurst();
+          const actualOut = check.greaterOrEqual(topicBurst, 0);
+          const expectedOut = true;
 
-      const actual = check.greaterOrEqual(topicBurst, 0);
-      const expected = true;
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
 
-      assert.equal(
-        actual,
-        expected,
-        `Should return either( 0 | positive ) [>> ${topicBurst}]`
-      );
+            assert.comment(
+              `Should return an Either[0, Positive]
+              ---
+                expected: Either[0, Positive]
+                actual:   ${topicBurst} [${typeof topicBurst}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+        }
+      )
+    );
+    const expected = true;
 
-    });
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Either[0, Positive]`);
+    }
 
     assert.end();
 
@@ -198,6 +346,9 @@ test('Topic Model', (parent) => {
   parent.test('topicVolumeListByDate() output', (assert) => {
 
     const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    let childrenActual;
+    let childrenExpected;
 
     const actual = check.all(
       check.apply(
@@ -240,23 +391,18 @@ test('Topic Model', (parent) => {
               topicVolumeListByDate,
               (item) => {
 
-                const mappedResult = check.map(
-                  item,
-                  {
-                    date: check.string,
-                    volume: check.integer,
-                  }
-                );
-
-                const childExpected = true;
-                const childActual = check.all(
-                  check.apply(
-                    Object.keys(mappedResult),
-                    (key) => mappedResult[key] === childExpected
+                childrenActual = check.all(
+                  check.map(
+                    item,
+                    {
+                      date: check.string,
+                      volume: check.integer,
+                    }
                   )
                 );
+                childrenExpected = true;
 
-                if (!isEqual(childActual, childExpected)) {
+                if (!isEqual(childrenActual, childrenExpected)) {
                   const topicId = topic.topicId();
                   const topicLabel = topic.topicLabel();
 
@@ -284,18 +430,23 @@ test('Topic Model', (parent) => {
           );
           const expectedOut = true;
 
-          if (isEqual(actualOut, expectedOut)) {
-            assert.pass(`Each child of the objects array should have the appropriate shape`);
+          if (!isEqual(actualOut, expectedOut)) {
+            return false;
           }
+
+          return true;
 
         }
       )
     );
-
     const expected = true;
 
     if (isEqual(actual, expected)) {
-      assert.pass(`Should return an array of objects`);
+      assert.pass(`Should return an Array<Object>`);
+    }
+
+    if (isEqual(childrenActual, childrenExpected)) {
+      assert.pass(`Each child of the objects array should have the appropriate shape`);
     }
 
     assert.end();
