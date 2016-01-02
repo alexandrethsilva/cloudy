@@ -412,7 +412,7 @@ test('Topic Model', (parent) => {
                   };
 
                   assert.comment(
-                    `Each child of the objects array should have the appropriate shape
+                    `Each object in the array should have the appropriate shape
                     ---
                       expected: ${JSON.stringify(expectedItemMirror)}
                       actual:   ${JSON.stringify(item)}
@@ -446,10 +446,106 @@ test('Topic Model', (parent) => {
     }
 
     if (isEqual(childrenActual, childrenExpected)) {
-      assert.pass(`Each child of the objects array should have the appropriate shape`);
+      assert.pass(`Each object in the array should have the appropriate shape`);
     }
 
     assert.end();
+  });
+
+  parent.test('topicVolumeByPageType() output', (assert) => {
+
+    const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    let childrenActual;
+    let childrenExpected;
+
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+
+          const topicVolumeByPageType = topic.topicVolumeByPageType();
+
+          const actualOut = check.object(topicVolumeByPageType);
+          const expectedOut = true;
+
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
+
+            assert.comment(
+              `Should return an Object
+              ---
+                expected: Object
+                actual:   ${topicVolumeByPageType} [${typeof topicVolumeByPageType}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      ),
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+
+          const topicVolumeByPageType = topic.topicVolumeByPageType();
+
+          const expectedVolumeByPageTypeMirror = {
+            blog: check.greaterOrEqual(0),
+            facebook: check.greaterOrEqual(0),
+            forum: check.greaterOrEqual(0),
+            general: check.greaterOrEqual(0),
+            image: check.greaterOrEqual(0),
+            news: check.greaterOrEqual(0),
+            review: check.greaterOrEqual(0),
+            twitter: check.greaterOrEqual(0),
+            video: check.greaterOrEqual(0),
+          };
+
+          childrenActual = check.all(
+            check.map(
+              topicVolumeByPageType,
+              expectedVolumeByPageTypeMirror
+            )
+          );
+          childrenExpected = true;
+
+          if (!isEqual(childrenActual, childrenExpected)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
+
+            assert.comment(
+              `The object should have the appropriate shape
+              ---
+              expected: ${JSON.stringify(expectedVolumeByPageTypeMirror)}
+              actual:   ${JSON.stringify(topicVolumeByPageType)}
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
+
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Object`);
+    }
+
+    if (isEqual(childrenActual, childrenExpected)) {
+      assert.pass(`The object should have the appropriate shape`);
+    }
+
+    assert.end();
+
   });
 
 });

@@ -28,7 +28,7 @@ const setup = (randomSampleSize: Number) => {
 
 test('Generic Utils', (parent) => {
 
-  parent.test('getSamplesFromImmutableGivenSize()', (child) => {
+  parent.test('getSamplesFromImmutableGivenSize() ↓', (child) => {
     const immutableSampleSize = random(0, 20);
     const sampleSize = random(0, immutableSampleSize);
 

@@ -4,7 +4,7 @@ import path from 'path';
 import test from 'blue-tape';
 import check from 'check-types';
 
-import {random} from 'lodash';
+import {isEqual, random} from 'lodash';
 import {List} from 'immutable';
 
 import Topic from '../../app/src/models/Topic';
@@ -30,56 +30,91 @@ const setup = () => {
 
 
 test('Topic Utils', (parent) => {
-  parent.test('topicDisplayGivenSentimentScore()', (child) => {
+  parent.test('topicDisplayGivenSentimentScore() ↓', (child) => {
     child.test('topicDisplayGivenSentimentScore() output', (assert) => {
 
       const {topics, testSampleSize} = setup();
       const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
 
-      sampleList.forEach((topic) => {
-        const score = topic.topicSentimentScore();
+      let actualOutput;
+      let expectedOutput;
 
-        const actualOutput = topicDisplayGivenSentimentScore(score);
-        let expectedOutput;
+      let actualType;
+      let expectedType;
 
-        const actualType = check.string(actualOutput);
-        const expectedType = true;
+      check.all(
+        check.apply(
+          sampleList.toArray(),
+          (topic) => {
+            const score = topic.topicSentimentScore();
 
-        assert.is(
-          actualType,
-          expectedType,
-          'Should return a string'
-        );
+            actualOutput = topicDisplayGivenSentimentScore(score);
 
-        if (score > 60) {
-          expectedOutput = 'positive';
+            if (score > 60) {
+              expectedOutput = 'positive';
+            } else if (score < 40) {
+              expectedOutput = 'negative';
+            } else {
+              expectedOutput = 'neutral';
+            }
 
-          assert.is(
-            actualOutput,
-            expectedOutput,
-            `The label should match the topic score [${score} >> ${actualOutput}]`
-          );
+            if (!isEqual(actualOutput, expectedOutput)) {
+              const topicId = topic.topicId();
+              const topicLabel = topic.topicLabel();
 
-        } else if (score < 40) {
-          expectedOutput = 'negative';
+              assert.comment(
+                `Should have a label that matches the topic score
+                ---
+                  expected: ${expectedOutput}
+                  actual:   ${actualOutput}
+                ...`
+              );
+              assert.fail(
+                `Error found on ${topicLabel} [ID: ${topicId}]`
+              );
+              return false;
+            }
+            return true;
+          }
+        ),
+        check.apply(
+          sampleList.toArray(),
+          (topic) => {
+            const score = topic.topicSentimentScore();
 
-          assert.is(
-            actualOutput,
-            expectedOutput,
-            `The label should match the topic score [${score} >> ${actualOutput}]`
-          );
+            const _topicDisplayGivenSentimentScore = topicDisplayGivenSentimentScore(score);
 
-        } else {
-          expectedOutput = 'neutral';
+            actualType = check.string(_topicDisplayGivenSentimentScore);
+            expectedType = true;
 
-          assert.is(
-            actualOutput,
-            expectedOutput,
-            `The label should match the topic score [${score} >> ${actualOutput}]`
-          );
+            if (!isEqual(actualType, expectedType)) {
+              const topicId = topic.topicId();
+              const topicLabel = topic.topicLabel();
 
-        }
-      });
+              assert.comment(
+                `Should return a String
+                ---
+                  expected: String
+                  actual:   ${_topicDisplayGivenSentimentScore} [${typeof _topicDisplayGivenSentimentScore}]
+                ...`
+              );
+              assert.fail(
+                `Error found on ${topicLabel} [ID: ${topicId}]`
+              );
+              return false;
+            }
+            return true;
+          }
+        )
+      );
+
+      if (isEqual(actualOutput, expectedOutput)) {
+        assert.pass(`Should have a label that matches the topic score`);
+      }
+
+      if (isEqual(actualType, expectedType)) {
+        assert.pass(`Should return a String`);
+      }
 
       assert.end();
 
