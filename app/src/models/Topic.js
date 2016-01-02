@@ -59,8 +59,6 @@ export default function Topic(source) {
     }, 0);
   };
 
-  const topicVolumeGivenPageType = (pageType) => topicVolumeByPageType[pageType];
-
   const topicQueryList = () => source.queries;
 
   return {
@@ -75,7 +73,6 @@ export default function Topic(source) {
     topicBurst,
     topicVolumeListByDate,
     topicVolumeByPageType,
-    topicVolumeGivenPageType,
     topicQueryList,
   };
 }

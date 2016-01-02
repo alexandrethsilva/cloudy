@@ -3,7 +3,7 @@ import path from 'path';
 
 import test from 'blue-tape';
 import check from 'check-types';
-import {isEqual} from 'lodash';
+import {isEqual, random} from 'lodash';
 import {List} from 'immutable';
 
 import Topic from '../../app/src/models/Topic';
@@ -17,7 +17,7 @@ const setup = () => {
       .reduce((accumulator, data) => accumulator.push(Topic(data)), List());
 
   const fixtures = {
-    testSampleSize: 5, //random(0, topics.size),
+    testSampleSize: random(0, topics.size),
     topics: topics,
   };
 
@@ -546,6 +546,147 @@ test('Topic Model', (parent) => {
 
     assert.end();
 
+  });
+
+  parent.test('topicCalculatedVolume() output', (assert) => {
+
+    const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicCalculatedVolume = topic.topicCalculatedVolume();
+
+          const actualOutput = check.greaterOrEqual(topicCalculatedVolume, 0);
+          const expectedOutput = true;
+
+          if (!isEqual(actualOutput, expectedOutput)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
+
+            assert.comment(
+              `Should return an Either[0, Positive]
+              ---
+              expected: Either[0, Positive]
+              actual:   ${topicCalculatedVolume} [${typeof topicCalculatedVolume}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
+
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Either[0, Positive]`);
+    }
+
+    assert.end();
+  });
+
+  parent.test('topicQueryList() output', (assert) => {
+
+    const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    let actualType;
+    let expectedType;
+
+    let actualShape;
+    let expectedShape;
+
+    check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+
+          const topicQueryList = topic.topicQueryList();
+
+          actualType = check.array.of.object(topicQueryList);
+          expectedType = true;
+
+          if (!isEqual(actualType, expectedType)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
+
+            assert.comment(
+              `Should return an Array<Object>
+              ---
+              expected: Object
+              actual:   ${JSON.stringify(topicQueryList)} [${typeof topicQueryList}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      ),
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicQueryList = topic.topicQueryList();
+
+          const expectedShapeMirror = {
+            id: check.integer,
+            name: check.string,
+            volume: check.greaterOrEqual(0),
+          };
+
+          check.all(
+            check.apply(
+              topicQueryList,
+              (item) => {
+
+                actualShape = check.all(
+                  check.map(
+                    item,
+                    expectedShapeMirror
+                  )
+                );
+
+                expectedShape = true;
+
+                if (!isEqual(actualShape, expectedShape)) {
+                  const topicId = topic.topicId();
+                  const topicLabel = topic.topicLabel();
+
+                  assert.comment(
+                    `Each object in the array should have the appropriate shape
+                    ---
+                    expected: ${JSON.stringify(expectedShapeMirror)}
+                    actual:   ${JSON.stringify(item)}
+                    ...`
+                  );
+                  assert.fail(
+                    `Error found on ${topicLabel} [ID: ${topicId}]`
+                  );
+                  return false;
+                }
+              }
+            )
+          );
+          return true;
+        }
+      )
+    );
+
+    if (isEqual(actualType, expectedType)) {
+      assert.pass(`Should return an Array<Object>`);
+    }
+
+    if (isEqual(actualShape, expectedShape)) {
+      assert.pass(`Each object in the array should have the appropriate shape`);
+    }
+
+    assert.end();
   });
 
 });
