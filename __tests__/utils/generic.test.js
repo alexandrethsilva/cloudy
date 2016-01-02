@@ -1,4 +1,5 @@
 import test from 'blue-tape';
+import check from 'check-types';
 
 import {random} from 'lodash';
 import {List, Set} from 'immutable';
@@ -31,7 +32,7 @@ test('Generic Utils', (parent) => {
     const immutableSampleSize = random(0, 20);
     const sampleSize = random(0, immutableSampleSize);
 
-    child.test('Using a List', (assert) => {
+    child.test('getSamplesFromImmutableGivenSize() output using a List', (assert) => {
       const {referenceImmutableList} = setup(immutableSampleSize);
 
       const actualType = List.isList(referenceImmutableList);
@@ -46,14 +47,29 @@ test('Generic Utils', (parent) => {
       assert.isEqual(
         actualSize,
         expectedSize,
-        `The List size (${actualSize}) should match the requested (${expectedSize})`
+        `The sample size should match the requested [${sampleSize} >> ${actualSize}]`
+      );
+
+      const negativeInput = -1;
+      const actualSizeWhenNegative = check.zero(
+          getSamplesFromImmutableGivenSize(
+          referenceImmutableList,
+          negativeInput
+        ).size
+      );
+      const expectedZeroWhenNegative = true;
+
+      assert.isEqual(
+        actualSizeWhenNegative,
+        expectedZeroWhenNegative,
+        `The sample should be empty when provided with a negative number [${negativeInput} >> 0]`
       );
 
       assert.end();
 
     });
 
-    child.test('Using a Set', (assert) => {
+    child.test('getSamplesFromImmutableGivenSize() output using a Set', (assert) => {
       const {referenceImmutableSet} = setup(immutableSampleSize);
 
       const actualType = Set.isSet(referenceImmutableSet);
@@ -68,7 +84,22 @@ test('Generic Utils', (parent) => {
       assert.isEqual(
         actualSize,
         expectedSize,
-        `The Set size (${actualSize}) should match the requested (${expectedSize})`
+        `The sample size should match the requested [${sampleSize} >> ${actualSize}]`
+      );
+
+      const negativeInput = -1;
+      const actualSizeWhenNegative = check.zero(
+          getSamplesFromImmutableGivenSize(
+          referenceImmutableSet,
+          negativeInput
+        ).size
+      );
+      const expectedZeroWhenNegative = true;
+
+      assert.isEqual(
+        actualSizeWhenNegative,
+        expectedZeroWhenNegative,
+        `The sample should be empty when provided with a negative number [${negativeInput} >> 0]`
       );
 
       assert.end();

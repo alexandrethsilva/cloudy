@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 import test from 'blue-tape';
+import check from 'check-types';
+
 import {random} from 'lodash';
 import {List} from 'immutable';
 
@@ -11,6 +13,7 @@ import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/genericUtils
 
 
 const setup = () => {
+
   const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
   const topics =
     JSON.parse(fs.readFileSync(topicsPath, 'utf8')).topics
@@ -22,7 +25,9 @@ const setup = () => {
   };
 
   return fixtures;
+
 };
+
 
 test('Topic Utils', (parent) => {
   parent.test('topicDisplayGivenSentimentScore()', (child) => {
@@ -37,8 +42,8 @@ test('Topic Utils', (parent) => {
         const actualOutput = topicDisplayGivenSentimentScore(score);
         let expectedOutput;
 
-        const actualType = typeof actualOutput;
-        const expectedType = 'string';
+        const actualType = check.string(actualOutput);
+        const expectedType = true;
 
         assert.is(
           actualType,
@@ -52,24 +57,27 @@ test('Topic Utils', (parent) => {
           assert.is(
             actualOutput,
             expectedOutput,
-            `The label (${actualOutput}) should match the topic score (${score})`
+            `The label should match the topic score [${score} >> ${actualOutput}]`
           );
+
         } else if (score < 40) {
           expectedOutput = 'negative';
 
           assert.is(
             actualOutput,
             expectedOutput,
-            `The label (${actualOutput}) should match the topic score (${score})`
+            `The label should match the topic score [${score} >> ${actualOutput}]`
           );
+
         } else {
           expectedOutput = 'neutral';
 
           assert.is(
             actualOutput,
             expectedOutput,
-            `The label (${actualOutput}) should match the topic score (${score})`
+            `The label should match the topic score [${score} >> ${actualOutput}]`
           );
+
         }
       });
 
