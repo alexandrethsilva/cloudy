@@ -1,5 +1,3 @@
-import cloud from 'd3-cloud';
-
 import {partial} from 'lodash';
 import {Map, List, is} from 'immutable';
 
@@ -9,7 +7,10 @@ import React, {Component, PropTypes} from 'react';
 import {displayTopicDetails} from 'actions/TopicDetailsActionCreators';
 import {displayTopicsCloud} from 'actions/TopicsCloudActionCreators';
 
-import {topicDisplayGivenSentimentScore} from 'utils/topicUtils';
+import {
+  calculateTopicListCoordinates,
+  topicDisplayGivenSentimentScore,
+} from 'utils/topic';
 
 class TopicsCloud extends Component {
   /**
@@ -66,51 +67,20 @@ class TopicsCloud extends Component {
      */
     const {dispatch} = this.props;
 
-    /*+
-     * Here we define the sizes we want to generate and make some base
-     * calculations on which one to pick according to the volume of any
-     * given topic.
-    */
-    const fontSizeDistributionList = List([10, 12, 14, 16, 18, 20]);
-    const fontSizeRange = (
-      topics.first().topicVolume() - topics.last().topicVolume()
-    ) / (fontSizeDistributionList.size - 1);
-
-    const topicList = topics.toArray().map((topic) => {
-      /**
-       * Here is where we pick the size of interest to us and define which
-       * information we want to pass onto Jason's positioning calculator.
-       */
-      return {
-        topicId: topic.topicId(),
-        topicLabel: topic.topicLabel(),
-        topicScore: topic.topicSentimentScore(),
-        topicSize: fontSizeDistributionList
-          .get(Math.floor(topic.topicVolume() / fontSizeRange)),
-      };
-    });
-
-    const layout = cloud()
-      .font('sans-serif')
-      .padding(15)
-      .rotate(() => 0)
-      .size([700, 300])
-      .words(topicList)
-      .text((topic) => topic.topicLabel)
-      .random(() => 0.5)
-      .fontSize((topic) => {
-        return topic.topicSize;
-      })
-      /**
-       * Here is the catch. After all is done, we just retrieve the
-       * information in a consumable way and dispatch it to our store.
-       */
-      .on('end', (calculatedTopics) => dispatch(displayTopicsCloud(calculatedTopics)));
-
-    /**
-     * This is the trigger to the calculations.
-     */
-    layout.start();
+    calculateTopicListCoordinates(
+      topics,
+      {
+        font: 'sans-serif',
+        fontSizeDistributionList: List([10, 12, 14, 16, 18, 20]),
+        padding: 15,
+        random: () => 0.5,
+        rotate: 0,
+        size: [700, 300],
+      },
+      (calculatedTopics) => {
+        dispatch(displayTopicsCloud(calculatedTopics));
+      }
+    );
   }
 
   renderTopicsCloudGivenCalculations(calculatedTopics) {

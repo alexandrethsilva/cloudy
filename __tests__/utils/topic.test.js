@@ -8,11 +8,16 @@ import {isEqual, random} from 'lodash';
 import {List} from 'immutable';
 
 import Topic from '../../app/src/models/Topic';
-import {topicDisplayGivenSentimentScore} from '../../app/src/utils/topicUtils';
-import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/genericUtils';
+import {
+  calculateFontSizeRange,
+  convertTopicListToCloudFormat,
+  calculateTopicListCoordinates,
+  topicDisplayGivenSentimentScore,
+} from '../../app/src/utils/topic';
+import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/generic';
 
 
-const setup = () => {
+const setup = (): Object => {
 
   const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
   const topics =
@@ -30,7 +35,212 @@ const setup = () => {
 
 
 test('Topic Utils', (parent) => {
-  parent.test('topicDisplayGivenSentimentScore() ↓', (child) => {
+  parent.test('calculateFontSizeRange()', (assert) => {
+
+    const maxVolume = 165;
+    const minVolume = 1;
+    const listSize = 5;
+
+    const result = calculateFontSizeRange(
+      maxVolume,
+      minVolume,
+      listSize
+    );
+
+    const actual = check.positive(result);
+    const expected = true;
+
+    assert.is(
+      actual,
+      expected,
+      `Should return a Positive`
+    );
+
+    assert.end();
+
+  });
+
+  parent.test('convertTopicListToCloudFormat() output', (assert) => {
+
+    const {topics, testSampleSize} = setup();
+    const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    const fontSizeDistributionList = List([10, 12, 14, 16, 18, 20]);
+
+    const fontSizeRange = calculateFontSizeRange(
+      sampleList.first().topicVolume(),
+      sampleList.last().topicVolume(),
+      fontSizeDistributionList.size
+    );
+
+    const convertedTopicList = convertTopicListToCloudFormat(
+      topics,
+      fontSizeDistributionList,
+      fontSizeRange
+    );
+
+    const actualType = check.array.of.object(convertedTopicList);
+    const expectedType = true;
+
+    assert.is(
+      actualType,
+      expectedType,
+      `Should return an Array<Object>`
+    );
+
+    const actualChildren = check.all(
+      check.apply(
+        convertedTopicList,
+        (item) => {
+
+          const expectedItemMirror = {
+            topicId: check.string,
+            topicLabel: check.string,
+            topicScore: check.maybe.greaterOrEqual(0),
+            topicSize: check.maybe.positive,
+          };
+
+          const actualOutput = check.all(
+            check.map(
+              item,
+              expectedItemMirror
+            )
+          );
+          const expectedOutput = true;
+
+          if (!isEqual(actualOutput, expectedOutput)) {
+            assert.comment(
+              `Each object in the array should have the appropriate shape
+              ---
+                expected: ${JSON.stringify(expectedItemMirror)}
+                actual:   ${JSON.stringify(item)}
+              ...`
+            );
+            assert.fail(
+              `Error found on ${JSON.stringify(item)}`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expectedChildren = true;
+
+    if (isEqual(actualChildren, expectedChildren)) {
+      assert.pass(`Each object in the array should have the appropriate shape`);
+    }
+
+    assert.end();
+
+  });
+
+  /**
+   * This test is being currently skipped because the internal
+   * method from the 'd3-cloud' lib depends on the document
+   * being available for calculations and the current state of
+   * tape-run apparently doesn't have support for ES6/2015,
+   * so I decided to have it written for reference, but
+   * make it run properly on a headless solution some other time.
+   */
+  parent.skip('calculateTopicListCoordinates() output', (assert) => {
+
+    const {topics} = setup();
+
+    const options = {
+      font: 'sans-serif',
+      fontSizeDistributionList: List([10, 12, 14, 16, 18, 20]),
+      padding: 15,
+      random: () => 0.5,
+      rotate: 0,
+      size: [700, 300],
+    };
+
+    const callback = (calculatedTopics) => {
+
+      const actualType = check.array.of.object(calculatedTopics);
+      const expectedType = true;
+
+      assert.is(
+        actualType,
+        expectedType,
+        `Should return an Array<Object>`
+      );
+
+      const actualChildren = check.all(
+        check.apply(
+          calculatedTopics,
+          (item) => {
+
+            const {
+              font,
+              padding,
+              rotate,
+            } = options;
+
+            const expectedItemMirror = {
+              topicId: check.string,
+              topicLabel: check.string,
+              topicScore: check.maybe.greaterOrEqual(0),
+              topicSize: check.maybe.positive,
+              text: check.string,
+              font: check.equal(font),
+              style: check.string,
+              weight: check.string,
+              rotate: check.equal(rotate),
+              size: check.maybe.positive,
+              padding: check.equal(padding),
+              x: check.integer, // eslint-disable-line id-length
+              y: check.integer, // eslint-disable-line id-length
+              width: check.positive,
+              height: check.positive,
+              xoff: check.integer,
+              yoff: check.integer,
+              x1: check.integer,
+              y1: check.integer,
+              x0: check.integer,
+              y0: check.integer,
+              hasText: check.boolean,
+            };
+
+            const actualOutput = check.all();
+            const expectedOutput = true;
+
+            if (!isEqual(actualOutput, expectedOutput)) {
+              assert.comment(
+                `Each object in the array should have the appropriate shape
+                ---
+                  expected: ${JSON.stringify(expectedItemMirror)}
+                  actual:   ${JSON.stringify(item)}
+                ...`
+              );
+              assert.fail(
+                `Error found on ${JSON.stringify(item)}`
+              );
+              return false;
+            }
+          }
+        )
+      );
+      const expectedChildren = true;
+
+      if (isEqual(actualChildren, expectedChildren)) {
+        assert.pass(`Each object in the array should have the appropriate shape`);
+      }
+
+      assert.end();
+
+    };
+
+    calculateTopicListCoordinates(
+      topics,
+      options,
+      callback
+    );
+
+  });
+
+  parent.test('topicDisplayGivenSentimentScore() ⇢', (child) => {
     child.test('topicDisplayGivenSentimentScore() output', (assert) => {
 
       const {topics, testSampleSize} = setup();

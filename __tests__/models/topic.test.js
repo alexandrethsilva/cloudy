@@ -7,10 +7,10 @@ import {isEqual, random} from 'lodash';
 import {List} from 'immutable';
 
 import Topic from '../../app/src/models/Topic';
-import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/genericUtils';
+import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/generic';
 
 
-const setup = () => {
+const setup = (): Object => {
   const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
   const topics =
     JSON.parse(fs.readFileSync(topicsPath, 'utf8')).topics
@@ -295,6 +295,49 @@ test('Topic Model', (parent) => {
 
     if (isEqual(actual, expected)) {
       assert.pass(`Should return a Maybe[Either[0, Positive]]`);
+    }
+
+    assert.end();
+
+  });
+
+  parent.test('topisSentimentScore() output', (assert) => {
+
+    const sampleList = getSamplesFromImmutableGivenSize(topics, testSampleSize);
+
+    const actual = check.all(
+      check.apply(
+        sampleList.toArray(),
+        (topic) => {
+          const topicSentimentScore = topic.topicSentimentScore();
+
+          const actualOut = check.greaterOrEqual(topicSentimentScore, 0);
+          const expectedOut = true;
+
+          if (!isEqual(actualOut, expectedOut)) {
+            const topicId = topic.topicId();
+            const topicLabel = topic.topicLabel();
+
+            assert.comment(
+              `Should return an Either[0, Positive]
+              ---
+                expected: string
+                actual:   ${topicSentimentScore} [${typeof topicSentimentScore}]
+              ...`
+            );
+            assert.fail(
+              `Error found on ${topicLabel} [ID: ${topicId}]`
+            );
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+    const expected = true;
+
+    if (isEqual(actual, expected)) {
+      assert.pass(`Should return an Either[0, Positive]`);
     }
 
     assert.end();

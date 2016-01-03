@@ -10,7 +10,7 @@ import {List} from 'immutable';
 import Topic from '../../app/src/models/Topic';
 
 
-const setup = () => {
+const setup = (): Object => {
   const topicsPath = path.join(__dirname, '..', '..', '/app/data/topics.json');
   const topicsFile = JSON.parse(fs.readFileSync(topicsPath, 'utf8'));
   const topics =

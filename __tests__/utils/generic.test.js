@@ -4,10 +4,10 @@ import check from 'check-types';
 import {random} from 'lodash';
 import {List, Set} from 'immutable';
 
-import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/genericUtils';
+import {getSamplesFromImmutableGivenSize} from '../../app/src/utils/generic';
 
 
-const setup = (randomSampleSize: Number) => {
+const setup = (randomSampleSize: Number): Object => {
   let index = 0;
 
   let fixtures = { // eslint-disable-line prefer-const
@@ -28,7 +28,7 @@ const setup = (randomSampleSize: Number) => {
 
 test('Generic Utils', (parent) => {
 
-  parent.test('getSamplesFromImmutableGivenSize() ↓', (child) => {
+  parent.test('getSamplesFromImmutableGivenSize() ⇢', (child) => {
     const immutableSampleSize = random(0, 20);
     const sampleSize = random(0, immutableSampleSize);
 

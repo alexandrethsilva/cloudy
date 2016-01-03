@@ -9,7 +9,7 @@ import createAppStore from 'utils/createAppStore';
 
 import App from 'components/App';
 
-import Logger from 'utils/logUtils';
+import Logger from 'utils/log';
 
 async function initApp() {
   try {
