@@ -1,4 +1,6 @@
 # Cloudy
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/alexandrethsilva/cloudy.svg?token=a60f1b30103735e32f1d3bab473578a153c2ea33bdc44fb1ba0cc21f2881a7ce&ts=1508159581539)](https://greenkeeper.io/)
 A small React/Redux app demonstrating uni-directional data-flow, its advantages, truly independent components and a bit more.
 
 ![alt Screenshot](https://github.com/alexandrethsilva/cloudy/blob/master/readme/cloudy.png "Screenshot")
